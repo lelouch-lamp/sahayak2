@@ -1,52 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      <%= type.charAt(0).toUpperCase() + type.slice(1) %> Assessments
-    </title>
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <div class="dashboard-container">
-      <nav class="sidebar">
-        <div class="logo">Student Portal</div>
-        <ul>
-          <li><a href="/student/assessments/weekly">Weekly Assessments</a></li>
-          <li>
-            <a href="/student/assessments/monthly">Monthly Assessments</a>
-          </li>
-          <li>
-            <a href="/student/assessments/quarterly">Quarterly Assessments</a>
-          </li>
-          <li><a href="/logout">Logout</a></li>
-        </ul>
-      </nav>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= type.charAt(0).toUpperCase() + type.slice(1) %> Assessments</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Link your external CSS if needed -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
 
-      <main class="main-content">
+        h1 {
+            color: #333;
+        }
+
+        .assessment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .download-btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="assessment-container">
         <h1><%= type.charAt(0).toUpperCase() + type.slice(1) %> Assessments</h1>
 
         <% if (assessments.length === 0) { %>
-        <p>No <%= type %> assessments available.</p>
+            <p>No assessments available.</p>
         <% } else { %>
-        <div class="assessments-list">
-          <% assessments.forEach(assessment => { %>
-          <div class="assessment-card">
-            <h3><%= assessment.assessmentName %></h3>
-            <p>Score: <%= assessment.score %>/5</p>
-            <p>Date: <%= new Date(assessment.date).toLocaleDateString() %></p>
-            <% if (assessment.comments) { %>
-            <p>Comments: <%= assessment.comments %></p>
-            <% } %>
-          </div>
-          <% }) %>
-        </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Assessment Name</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% assessments.forEach((assessment, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= assessment.assessmentName %></td>
+                            <td><%= assessment.score %>/5</td>
+                            <td><%= new Date(assessment.date).toLocaleDateString() %></td>
+                            <td><%= assessment.comments || "N/A" %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
         <% } %>
-      </main>
+
+        <!-- Download PDF Button -->
+        <div class="download-btn-container">
+            <a href="/student/assessments/<%= type %>/pdf" class="download-btn">Download PDF Report</a>
+        </div>
+
     </div>
-  </body>
+
+</body>
 </html>
+
 
 <!-- <!DOCTYPE html>
 <html lang="en">

@@ -84,6 +84,9 @@ const Educator = require("./models/Educator");
 const Program = require("./models/Program");
 const Assessment = require("./models/Assessment");
 
+app.set("views", path.join(__dirname, "views")); 
+app.set("view engine", "ejs");
+
 // Routes
 app.use("/", require("./routes/auth"));
 app.use("/admin", require("./routes/admin"));

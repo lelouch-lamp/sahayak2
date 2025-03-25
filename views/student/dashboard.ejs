@@ -1,102 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
-  <body>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
     <div class="dashboard-container">
-      <nav class="sidebar">
-        <div class="logo">
-          <a
-            href="/student/dashboard/"
-            style="color: black; text-decoration: none"
-            >Student Portal</a
-          >
-        </div>
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">Student Portal</div>
+            <ul>
+                <li><a href="/student/dashboard">Dashboard</a></li>
+                <li><a href="/student/assessments/weekly">Weekly Assessments</a></li>
+                <li><a href="/student/assessments/monthly">Monthly Assessments</a></li>
+                <li><a href="/student/assessments/quarterly">Quarterly Assessments</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
 
-        <ul>
-          <li><a href="/student/assessments/weekly">Weekly Assessments</a></li>
-          <li>
-            <a href="/student/assessments/monthly">Monthly Assessments</a>
-          </li>
-          <li>
-            <a href="/student/assessments/quarterly">Quarterly Assessments</a>
-          </li>
-          <li><a href="/logout">Logout</a></li>
-        </ul>
-      </nav>
+        <!-- Main Content -->
+        <main class="main-content">
+            <h1>My Assessments</h1>
 
-      <main class="main-content">
-        <h1>My Assessments</h1>
-
-        <% if (assessments.length === 0) { %>
-        <p>No assessments available.</p>
-        <% } else { %>
-        <div class="charts-container">
-          <div class="chart-card">
-            <h3>Weekly Progress</h3>
-            <canvas id="weeklyChart"></canvas>
-          </div>
-          <div class="chart-card">
-            <h3>Monthly Progress</h3>
-            <canvas id="monthlyChart"></canvas>
-          </div>
-          <div class="chart-card">
-            <h3>Quarterly Progress</h3>
-            <canvas id="quarterlyChart"></canvas>
-          </div>
-        </div>
-
-        <script>
-          const assessments = <%- JSON.stringify(assessments) %>;
-
-          const weeklyAssessments = assessments.filter(a => a.type === "weekly");
-          const monthlyAssessments = assessments.filter(a => a.type === "monthly");
-          const quarterlyAssessments = assessments.filter(a => a.type === "quarterly");
-
-          function createChart(elementId, data, label) {
-              if (data.length === 0) {
-                  document.getElementById(elementId).parentElement.style.display = "none";
-                  return;
-              }
-
-              const ctx = document.getElementById(elementId).getContext("2d");
-              new Chart(ctx, {
-                  type: "line",
-                  data: {
-                      labels: data.map(a => a.assessmentName),
-                      datasets: [{
-                          label: label,
-                          data: data.map(a => a.score),
-                          borderColor: "rgb(75, 192, 192)",
-                          tension: 0.1
-                      }]
-                  },
-                  options: {
-                      responsive: true,
-                      scales: {
-                          y: {
-                              beginAtZero: true,
-                              max: 5
-                          }
-                      }
-                  }
-              });
-          }
-
-          createChart("weeklyChart", weeklyAssessments, "Weekly Scores");
-          createChart("monthlyChart", monthlyAssessments, "Monthly Scores");
-          createChart("quarterlyChart", quarterlyAssessments, "Quarterly Scores");
-        </script>
-        <% } %>
-      </main>
+            <% if (typeof assessments !== "undefined" && assessments.length > 0) { %>
+                <div class="charts-container">
+                    <% assessments.forEach(assessment => { %>
+                        <div class="assessment-card">
+                            <h3><%= assessment.assessmentName %></h3>
+                            <p>Score: <%= assessment.score %>/5</p>
+                            <p>Date: <%= new Date(assessment.date).toLocaleDateString() %></p>
+                            <% if (assessment.comments) { %>
+                                <p>Comments: <%= assessment.comments %></p>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p>No assessments available.</p>
+            <% } %>
+        </main>
     </div>
-  </body>
+
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .dashboard-container {
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 10px 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+        .sidebar ul li a:hover {
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        .charts-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .assessment-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            width: 300px;
+        }
+    </style>
+</body>
 </html>
+
 <!-- <!DOCTYPE html>
 <html lang="en">
 <head>

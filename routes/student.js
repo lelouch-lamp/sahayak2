@@ -1,181 +1,113 @@
 const express = require("express");
 const router = express.Router();
 const Assessment = require("../models/Assessment");
-const Student = require("../models/Student");
-const mongoose = require("mongoose");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
+const path = require("path");
 
-// Middleware to check if user is a student
-const isStudent = (req, res, next) => {
-  if (req.session.user && req.session.user.role === "student") {
-    next();
-  } else {
-    res.redirect("/");
-  }
-};
-
-router.use(isStudent);
-
-// Student Dashboard (Fetch all assessments)
+// 📌 Route to render the student dashboard
 router.get("/dashboard", async (req, res) => {
   try {
-    const student = await Student.findOne({
-      parentEmail: req.session.user.email,
-    });
-
-    if (!student) {
-      console.log("Student not found for email:", req.session.user.email);
-      return res.status(404).send("Student not found");
-    }
-
-    // Find assessments using student._id
-    const assessments = await Assessment.find({
-      studentId: student._id,
-    }).lean();
-
+    const assessments = await Assessment.find(); // Fetch all assessments
     res.render("student/dashboard", { assessments });
-  } catch (error) {
-    console.error("Error loading dashboard:", error);
-    res.status(500).send("Internal Server Error");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
   }
 });
 
-// Fetch assessments by type (weekly, monthly, quarterly)
+// 📌 Route to render assessments page
 router.get("/assessments/:type", async (req, res) => {
   try {
     const { type } = req.params;
+    const assessments = await Assessment.find({ type });
+    res.render("student/assessments", { type, assessments });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
 
-    if (!["weekly", "monthly", "quarterly"].includes(type)) {
-      return res.status(400).send("Invalid assessment type");
+// 📌 Route to generate and download a professional PDF report
+router.get("/assessments/:type/pdf", async (req, res) => {
+  try {
+    const { type } = req.params;
+    const assessments = await Assessment.find({ type });
+    const doc = new PDFDocument({ margin: 50 });
+
+    // Ensure reports directory exists
+    const reportsDir = path.join(__dirname, "../public/reports");
+    if (!fs.existsSync(reportsDir)) {
+      fs.mkdirSync(reportsDir, { recursive: true });
     }
 
-    // Get student details using email
-    const student = await Student.findOne({
-      parentEmail: req.session.user.email,
+    // Define file path
+    const filePath = path.join(reportsDir, `${type}-assessments.pdf`);
+    const stream = fs.createWriteStream(filePath);
+    doc.pipe(stream);
+
+    // Add logo
+    const logoPath = path.join(__dirname, "../public/images/logo.png");
+    if (fs.existsSync(logoPath)) {
+      doc.image(logoPath, 50, 30, { width: 80 });
+    }
+
+    // Add Company Name
+    doc.fontSize(22).font("Helvetica-Bold").text("Ishanya Foundation", 0, 50, { align: "center" });
+    doc.moveDown(2);
+
+    // Add Report Title
+    doc.fontSize(16).font("Helvetica-Bold").text(`${type.charAt(0).toUpperCase() + type.slice(1)} Assessments`, { align: "center" });
+    doc.moveDown(1);
+
+    // Draw a line under the title
+    doc.moveTo(50, 140).lineTo(550, 140).stroke();
+    doc.moveDown();
+
+    // Define table headers with proper alignment
+    const tableTop = 160;
+    const columnWidths = [40, 180, 80, 100, 100];
+    const startX = 50;
+    let yPosition = tableTop + 20;
+
+    // Headers
+    doc.fontSize(12).font("Helvetica-Bold");
+    doc.text("#", startX, tableTop, { width: columnWidths[0], align: "center" });
+    doc.text("Assessment Name", startX + columnWidths[0] + 10, tableTop, { width: columnWidths[1], align: "left" });
+    doc.text("Score", startX + columnWidths[0] + columnWidths[1] + 10, tableTop, { width: columnWidths[2], align: "center" });
+    doc.text("Date", startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + 10, tableTop, { width: columnWidths[3], align: "center" });
+    doc.text("Comments", startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10, tableTop, { width: columnWidths[4], align: "left" });
+
+    // Add padding for table rows
+    assessments.forEach((assessment, index) => {
+    yPosition += 30; // Increased row height
+
+    if (index % 2 !== 0) {
+        // Alternate row background color
+        doc.rect(50, yPosition - 20, 500, 25).fill("#f2f2f2").stroke();
+    }
+
+    doc.fillColor("black").text(`${index + 1}`, startX, yPosition, { width: columnWidths[0], align: "center" });
+    doc.text(assessment.assessmentName, startX + columnWidths[0] + 10, yPosition, { width: columnWidths[1], align: "left" });
+    doc.text(`${assessment.score}/5`, startX + columnWidths[0] + columnWidths[1] + 10, yPosition, { width: columnWidths[2], align: "center" });
+    doc.text(new Date(assessment.date).toLocaleDateString(), startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + 10, yPosition, { width: columnWidths[3], align: "center" });
+    doc.text(assessment.comments || "N/A", startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10, yPosition, { width: columnWidths[4], align: "left" });
+  });
+
+
+    // Footer
+    doc.moveTo(50, 750).lineTo(550, 750).stroke();
+    doc.fontSize(10).font("Helvetica-Oblique").text("Generated by Student Assessment Portal", 50, 760, { align: "left" });
+    doc.text(`Page 1`, 500, 760, { align: "right" });
+
+    doc.end();
+    stream.on("finish", () => {
+      res.download(filePath);
     });
-
-    if (!student) {
-      console.log("Student not found for email:", req.session.user.email);
-      return res.status(404).send("Student not found");
-    }
-
-    console.log("Fetching assessments for:", { studentId: student._id, type });
-
-    // Find assessments using student._id
-    const assessments = await Assessment.find({
-      studentId: new mongoose.Types.ObjectId(student._id),
-      type,
-    }).lean();
-
-    console.log("Assessments retrieved:", assessments);
-
-    res.render("student/assessments", { assessments, type });
-  } catch (error) {
-    console.error("Error fetching assessments:", error);
-    res.status(500).send("Internal Server Error");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error generating PDF");
   }
 });
 
 module.exports = router;
-
-// const express = require("express");
-// const router = express.Router();
-// const Assessment = require("../models/Assessment");
-// const Student = require("../models/Student");
-
-// // Middleware to check if user is a student
-// const isStudent = (req, res, next) => {
-//   if (req.session.user && req.session.user.role === "student") {
-//     next();
-//   } else {
-//     res.redirect("/");
-//   }
-// };
-
-// router.use(isStudent);
-
-// // Student Dashboard (Fetch all assessments)
-// router.get("/dashboard", async (req, res) => {
-//   try {
-//     const studentId = req.session.user._id;
-
-//     // Find student and populate assessments
-//     const assessments = await Assessment.find({ studentId }).lean();
-
-//     res.render("student/dashboard", { assessments });
-//   } catch (error) {
-//     console.error("Error loading dashboard:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-
-// // Fetch assessments by type (weekly, monthly, quarterly)
-// const mongoose = require("mongoose");
-
-// router.get("/assessments/:type", async (req, res) => {
-//   try {
-//     const { type } = req.params;
-//     const studentId = req.session.user._id;
-
-//     console.log("Fetching assessments for:", { studentId, type });
-
-//     if (!["weekly", "monthly", "quarterly"].includes(type)) {
-//       return res.status(400).send("Invalid assessment type");
-//     }
-
-//     // Convert studentId to ObjectId
-//     const assessments = await Assessment.find({
-//       studentId: new mongoose.Types.ObjectId(studentId),
-//       type,
-//     }).lean();
-
-//     console.log("Assessments retrieved:", assessments);
-
-//     res.render("student/assessments", { assessments, type });
-//   } catch (error) {
-//     console.error("Error fetching assessments:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// });
-
-// module.exports = router;
-
-// const express = require('express');
-// const router = express.Router();
-// const Assessment = require('../models/Assessment');
-
-// // Middleware to check if user is student
-// const isStudent = (req, res, next) => {
-//   if (req.session.user && req.session.user.role === 'student') {
-//     next();
-//   } else {
-//     res.redirect('/');
-//   }
-// };
-
-// router.use(isStudent);
-
-// // Student Dashboard
-// router.get('/dashboard', async (req, res) => {
-//   try {
-//     const assessments = await Assessment.find({ studentId: req.session.user._id })
-//       .populate('programId');
-//     res.render('student/dashboard', { assessments });
-//   } catch (error) {
-//     res.status(500).send('Server error');
-//   }
-// });
-
-// // Get assessments by type
-// router.get('/assessments/:type', async (req, res) => {
-//   try {
-//     const assessments = await Assessment.find({
-//       studentId: req.session.user._id,
-//       type: req.params.type
-//     }).populate('programId');
-//     res.render('student/assessments', { assessments });
-//   } catch (error) {
-//     res.status(500).send('Error fetching assessments');
-//   }
-// });
-
-// module.exports = router;
