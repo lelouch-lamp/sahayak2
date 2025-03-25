@@ -18,6 +18,30 @@
             color: #333;
         }
 
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .back-btn:active {
+            transform: scale(0.98);
+        }
+
         .assessment-container {
             max-width: 800px;
             margin: 0 auto;
@@ -75,6 +99,9 @@
 </head>
 <body>
 
+    <!-- Back Button -->
+    <a href="javascript:history.back()" class="back-btn">← Back</a>
+
     <div class="assessment-container">
         <h1><%= type.charAt(0).toUpperCase() + type.slice(1) %> Assessments</h1>
 
@@ -114,6 +141,7 @@
 
 </body>
 </html>
+
 
 
 <!-- <!DOCTYPE html>

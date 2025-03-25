@@ -16,11 +16,16 @@ router.get("/dashboard", async (req, res) => {
   }
 });
 
-// 📌 Route to render assessments page
+// 📌 Route to render assessments page dynamically based on type
 router.get("/assessments/:type", async (req, res) => {
   try {
     const { type } = req.params;
     const assessments = await Assessment.find({ type });
+
+    if (!assessments.length) {
+      return res.status(404).send(`No assessments found for type: ${type}`);
+    }
+
     res.render("student/assessments", { type, assessments });
   } catch (err) {
     console.error(err);
@@ -28,12 +33,16 @@ router.get("/assessments/:type", async (req, res) => {
   }
 });
 
-// 📌 Route to generate and download a professional PDF report
 router.get("/assessments/:type/pdf", async (req, res) => {
   try {
     const { type } = req.params;
     const assessments = await Assessment.find({ type });
-    const doc = new PDFDocument({ margin: 50 });
+
+    if (!assessments.length) {
+      return res.status(404).send(`No assessments found for type: ${type}`);
+    }
+
+    const doc = new PDFDocument({ margin: 50, size: 'A4' });
 
     // Ensure reports directory exists
     const reportsDir = path.join(__dirname, "../public/reports");
@@ -46,59 +55,110 @@ router.get("/assessments/:type/pdf", async (req, res) => {
     const stream = fs.createWriteStream(filePath);
     doc.pipe(stream);
 
-    // Add logo
+    // Add Logo & Header
     const logoPath = path.join(__dirname, "../public/images/logo.png");
     if (fs.existsSync(logoPath)) {
-      doc.image(logoPath, 50, 30, { width: 80 });
+      doc.image(logoPath, 50, 45, { width: 100 });
     }
 
-    // Add Company Name
-    doc.fontSize(22).font("Helvetica-Bold").text("Ishanya Foundation", 0, 50, { align: "center" });
-    doc.moveDown(2);
+    // Main Title with Dash-Separated Tagline
+    doc
+      .fontSize(22)
+      .font("Helvetica-Bold")
+      .fillColor("#333333")
+      .text("Ishanya Foundation", { align: "center" })
+      .moveDown(0.3);
 
-    // Add Report Title
-    doc.fontSize(16).font("Helvetica-Bold").text(`${type.charAt(0).toUpperCase() + type.slice(1)} Assessments`, { align: "center" });
-    doc.moveDown(1);
+    // Tagline with Dash
+    doc
+      .fontSize(12)
+      .font("Helvetica")
+      .fillColor("#666666")
+      .text("— Journey to Inclusion —", { align: "center" })
+      .moveDown(0.8);
 
-    // Draw a line under the title
-    doc.moveTo(50, 140).lineTo(550, 140).stroke();
-    doc.moveDown();
+    // Assessment Type
+    doc
+      .fontSize(16)
+      .font("Helvetica-Bold")
+      .fillColor("#007bff")
+      .text(`${type.charAt(0).toUpperCase() + type.slice(1)} Assessments`, { align: "center" })
+      .moveDown(1);
 
-    // Define table headers with proper alignment
-    const tableTop = 160;
-    const columnWidths = [40, 180, 80, 100, 100];
+    // Horizontal Line
+    doc
+      .strokeColor("#007bff")
+      .lineWidth(1.5)
+      .moveTo(50, 200)
+      .lineTo(550, 200)
+      .stroke();
+
+    // Table Configuration
+    const tableTop = 230;
+    const columnWidths = [40, 200, 80, 100, 120];
     const startX = 50;
-    let yPosition = tableTop + 20;
+    const tableHeaderHeight = 35;
+    const rowHeight = 35;
 
-    // Headers
-    doc.fontSize(12).font("Helvetica-Bold");
-    doc.text("#", startX, tableTop, { width: columnWidths[0], align: "center" });
-    doc.text("Assessment Name", startX + columnWidths[0] + 10, tableTop, { width: columnWidths[1], align: "left" });
-    doc.text("Score", startX + columnWidths[0] + columnWidths[1] + 10, tableTop, { width: columnWidths[2], align: "center" });
-    doc.text("Date", startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + 10, tableTop, { width: columnWidths[3], align: "center" });
-    doc.text("Comments", startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10, tableTop, { width: columnWidths[4], align: "left" });
+    // Table Header
+    doc
+      .fillColor("#007bff")
+      .rect(startX, tableTop, 500, tableHeaderHeight)
+      .fill();
 
-    // Add padding for table rows
+    doc.fillColor("white").font("Helvetica-Bold").fontSize(12);
+    const headers = ["#", "Assessment Name", "Score", "Date", "Comments"];
+    headers.forEach((header, index) => {
+      const x = startX + columnWidths.slice(0, index).reduce((a, b) => a + b, 0);
+      doc.text(header, x, tableTop + 10, { 
+        width: columnWidths[index], 
+        align: index === 0 ? "center" : index === 2 ? "center" : "left" 
+      });
+    });
+
+    // Table Rows
+    doc.fillColor("black").font("Helvetica").fontSize(11);
     assessments.forEach((assessment, index) => {
-    yPosition += 30; // Increased row height
+      const yPosition = tableTop + tableHeaderHeight + (index * rowHeight);
+      
+      // Alternating row background
+      if (index % 2 !== 0) {
+        doc.fillColor("#f4f4f4")
+           .rect(startX, yPosition, 500, rowHeight)
+           .fill();
+      }
 
-    if (index % 2 !== 0) {
-        // Alternate row background color
-        doc.rect(50, yPosition - 20, 500, 25).fill("#f2f2f2").stroke();
-    }
+      doc.fillColor("black");
+      const rowData = [
+        `${index + 1}`,
+        assessment.assessmentName,
+        `${assessment.score}/5`,
+        new Date(assessment.date).toLocaleDateString(),
+        assessment.comments || "N/A"
+      ];
 
-    doc.fillColor("black").text(`${index + 1}`, startX, yPosition, { width: columnWidths[0], align: "center" });
-    doc.text(assessment.assessmentName, startX + columnWidths[0] + 10, yPosition, { width: columnWidths[1], align: "left" });
-    doc.text(`${assessment.score}/5`, startX + columnWidths[0] + columnWidths[1] + 10, yPosition, { width: columnWidths[2], align: "center" });
-    doc.text(new Date(assessment.date).toLocaleDateString(), startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + 10, yPosition, { width: columnWidths[3], align: "center" });
-    doc.text(assessment.comments || "N/A", startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10, yPosition, { width: columnWidths[4], align: "left" });
-  });
-
+      rowData.forEach((data, colIndex) => {
+        const x = startX + columnWidths.slice(0, colIndex).reduce((a, b) => a + b, 0);
+        doc.text(data, x, yPosition + 10, { 
+          width: columnWidths[colIndex], 
+          align: colIndex === 0 ? "center" : colIndex === 2 ? "center" : "left" 
+        });
+      });
+    });
 
     // Footer
-    doc.moveTo(50, 750).lineTo(550, 750).stroke();
-    doc.fontSize(10).font("Helvetica-Oblique").text("Generated by Student Assessment Portal", 50, 760, { align: "left" });
-    doc.text(`Page 1`, 500, 760, { align: "right" });
+    doc
+      .strokeColor("#007bff")
+      .lineWidth(0.5)
+      .moveTo(50, 750)
+      .lineTo(550, 750)
+      .stroke();
+
+    doc
+      .fontSize(10)
+      .fillColor("#666")
+      .text("© 2025 Ishanya Foundation | Journey to Inclusion", 50, 760, { align: "left" })
+      .text("Page 1", 500, 760, { align: "right" });
 
     doc.end();
     stream.on("finish", () => {
