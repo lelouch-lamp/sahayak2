@@ -3,120 +3,122 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>View Student</title>
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <div class="dashboard-container">
-      <main class="main-content">
-        <h1>Student Details</h1>
-        <%= console.log("Profile Image Path:", student.profileImage) %>
-
-        <!-- ✅ Profile Image (Only if available) -->
-        <% if (student.profileImage && student.profileImage.trim() !== "") { %>
-        <div class="profile-image-container">
-          <img
-            src="<%= student.profileImage %>"
-            alt="Profile Image"
-            class="profile-image"
-          />
-        </div>
-        <% } %>
-
-        <table>
-          <tr>
-            <th>Student ID</th>
-            <td><%= student.studentId %></td>
-          </tr>
-          <tr>
-            <th>Name</th>
-            <td><%= student.name %></td>
-          </tr>
-          <tr>
-            <th>Status</th>
-            <td><%= student.status %></td>
-          </tr>
-          <tr>
-            <th>Program</th>
-            <td><%= student.programId.programName %></td>
-          </tr>
-          <tr>
-            <th>Days of Week</th>
-            <td><%= student.daysOfWeek.join(", ") %></td>
-          </tr>
-          <tr>
-            <th>Primary Educator</th>
-            <td><%= student.educator.name %></td>
-          </tr>
-          <tr>
-            <th>Secondary Educator</th>
-            <td>
-              <%= student.secondaryEducator ? student.secondaryEducator.name :
-              "None" %>
-            </td>
-          </tr>
-          <tr>
-            <th>Session Type</th>
-            <td><%= student.sessionType %></td>
-          </tr>
-          <tr>
-            <th>Father's Name</th>
-            <td><%= student.fatherName %></td>
-          </tr>
-          <tr>
-            <th>Mother's Name</th>
-            <td><%= student.motherName %></td>
-          </tr>
-          <tr>
-            <th>Blood Group</th>
-            <td><%= student.bloodGroup %></td>
-          </tr>
-          <tr>
-            <th>Contact Number</th>
-            <td><%= student.contactNo %></td>
-          </tr>
-          <tr>
-            <th>Alternative Contact</th>
-            <td><%= student.alternativeContactNo %></td>
-          </tr>
-          <tr>
-            <th>Parent's Email</th>
-            <td><%= student.parentEmail %></td>
-          </tr>
-          <tr>
-            <th>Address</th>
-            <td><%= student.address %></td>
-          </tr>
-          <tr>
-            <th>Transport</th>
-            <td><%= student.transport %></td>
-          </tr>
-          <tr>
-            <th>Comments</th>
-            <td><%= student.comments %></td>
-          </tr>
-          <tr>
-            <th>Enrollment Year</th>
-            <td><%= student.enrollmentYear %></td>
-          </tr>
-        </table>
-        <button onclick="window.history.back()">Back</button>
-      </main>
-    </div>
-
+    <title>Student Details</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
     <style>
-      .profile-image-container {
-        text-align: center;
-        margin-bottom: 20px;
+      body {
+        background-color: #f9fafb;
+        font-family: 'Inter', sans-serif;
       }
-
       .profile-image {
-        width: 150px;
-        height: 150px;
         border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #ddd;
       }
     </style>
+  </head>
+  <body>
+    <div class="max-w-4xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+      <h1 class="text-3xl font-bold text-blue-900 text-center mb-6">
+        Student Details
+      </h1>
+
+      <% if (student.profileImage && student.profileImage.trim() !== "") { %>
+      <div class="flex justify-center mb-6">
+        <img
+          src="<%= student.profileImage %>"
+          alt="Student Image"
+          class="profile-image w-32 h-32 border-2 border-blue-500"
+        />
+      </div>
+      <% } %>
+
+      <div class="space-y-4">
+        <div>
+          <p class="font-semibold text-gray-700">Student ID:</p>
+          <p class="text-gray-600"><%= student.studentId %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Name:</p>
+          <p class="text-gray-600"><%= student.name %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Status:</p>
+          <p class="text-gray-600"><%= student.status %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Program:</p>
+          <p class="text-gray-600"><%= student.programId.programName %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Days of the Week:</p>
+          <p class="text-gray-600"><%= student.daysOfWeek.join(", ") %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Primary Educator:</p>
+          <p class="text-gray-600"><%= student.educator.name %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Secondary Educator:</p>
+          <p class="text-gray-600">
+            <%= student.secondaryEducator ? student.secondaryEducator.name : "None" %>
+          </p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Session Type:</p>
+          <p class="text-gray-600"><%= student.sessionType %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Father's Name:</p>
+          <p class="text-gray-600"><%= student.fatherName %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Mother's Name:</p>
+          <p class="text-gray-600"><%= student.motherName %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Blood Group:</p>
+          <p class="text-gray-600"><%= student.bloodGroup %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Contact Number:</p>
+          <p class="text-gray-600"><%= student.contactNo %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Alternative Contact:</p>
+          <p class="text-gray-600"><%= student.alternativeContactNo %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Parent's Email:</p>
+          <p class="text-gray-600"><%= student.parentEmail %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Address:</p>
+          <p class="text-gray-600"><%= student.address %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Transport:</p>
+          <p class="text-gray-600"><%= student.transport %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Comments:</p>
+          <p class="text-gray-600"><%= student.comments %></p>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-700">Enrollment Year:</p>
+          <p class="text-gray-600"><%= student.enrollmentYear %></p>
+        </div>
+      </div>
+
+      <div class="flex justify-center mt-6">
+        <button
+          onclick="window.history.back()"
+          class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-200"
+        >
+          Back
+        </button>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,45 +1,130 @@
-<!-- viewProgram.ejs -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>View Program</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f3f4f6;
+        font-family: 'Inter', sans-serif;
+      }
+      .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .heading {
+        text-align: center;
+        font-size: 1.875rem;
+        font-weight: bold;
+        color: #1e40af;
+        margin-bottom: 2rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid #e5e7eb;
+        padding: 0.75rem;
+        text-align: left;
+      }
+      th {
+        background-color: #f3f4f6;
+        font-weight: bold;
+        color: #1e293b;
+      }
+      td {
+        background-color: #ffffff;
+      }
+      .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #1f2937;
+        margin-top: 2rem;
+      }
+    </style>
   </head>
   <body>
-    <h1>Program Details</h1>
-    <p><strong>Program ID:</strong> <%= program.program_id %></p>
-    <p><strong>Name:</strong> <%= program.programName %></p>
-    <p><strong>Duration:</strong> <%= program.duration %> months</p>
+    <div class="container">
+      <h1 class="heading">Program Details</h1>
 
-    <h3>Weekly Assessments</h3>
-    <ul>
-      <% program.weekly.forEach(week => { %>
-      <li>Week <%= week.week %>: <%= week.name %></li>
-      <% }) %>
-    </ul>
+      <table>
+        <tr>
+          <th>Program ID</th>
+          <td><%= program.program_id %></td>
+        </tr>
+        <tr>
+          <th>Program Name</th>
+          <td><%= program.programName %></td>
+        </tr>
+        <tr>
+          <th>Duration</th>
+          <td><%= program.duration %> months</td>
+        </tr>
+      </table>
 
-    <h3>Monthly Assessments</h3>
-    <ul>
-      <% program.monthly.forEach(month => { %>
-      <li><%= month.month %>: <%= month.name %></li>
-      <% }) %>
-    </ul>
+      <h2 class="section-title">Weekly Assessments</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>Assessment Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% program.weekly.forEach(week => { %>
+          <tr>
+            <td>Week <%= week.week %></td>
+            <td><%= week.name %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
 
-    <h3>Quarterly Assessments</h3>
-    <ul>
-      <% program.quarterly.forEach(quarter => { %>
-      <li><%= quarter.quarter %>: <%= quarter.name %></li>
-      <% }) %>
-    </ul>
+      <h2 class="section-title">Monthly Assessments</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Assessment Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% program.monthly.forEach(month => { %>
+          <tr>
+            <td>Month <%= month.month %></td>
+            <td><%= month.name %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
 
-    <a href="/admin/programs/edit/<%= program._id %>">Edit</a>
-    <form
-      action="/admin/programs/delete/<%= program._id %>"
-      method="POST"
-      onsubmit="return confirm('Are you sure?');"
-    >
-      <button type="submit">Delete</button>
-    </form>
+      <h2 class="section-title">Quarterly Assessments</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Quarter</th>
+            <th>Assessment Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% program.quarterly.forEach(quarter => { %>
+          <tr>
+            <td>Quarter <%= quarter.quarter %></td>
+            <td><%= quarter.name %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>

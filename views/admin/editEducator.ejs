@@ -4,82 +4,172 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Edit Educator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f9fafb;
+        font-family: 'Inter', sans-serif;
+      }
+      .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .heading {
+        text-align: center;
+        font-size: 1.875rem;
+        font-weight: bold;
+        color: #1e40af;
+        margin-bottom: 2rem;
+      }
+      label {
+        font-weight: bold;
+        color: #374151;
+        margin-bottom: 0.5rem;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        margin-bottom: 1rem;
+      }
+      button {
+        background-color: #1d4ed8;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        font-weight: bold;
+        width: 100%;
+        margin-top: 1rem;
+      }
+      button:hover {
+        background-color: #2563eb;
+      }
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+      }
+      .checkbox-label input {
+        margin-right: 0.5rem;
+      }
+      .back-link {
+        display: block;
+        text-align: center;
+        color: #1d4ed8;
+        margin-top: 1rem;
+      }
+    </style>
   </head>
   <body>
-    <h1>Edit Educator</h1>
-    <form action="/admin/educators/update/<%= educator._id %>" method="POST">
-      <label for="name">Name:</label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        value="<%= educator.name %>"
-        required
-      />
+    <div class="container">
+      <h1 class="heading">Edit Educator</h1>
+      <form action="/admin/educators/update/<%= educator._id %>" method="POST">
+        <div class="mb-4">
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value="<%= educator.name %>"
+            required
+          />
+        </div>
 
-      <label for="email">Email:</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        value="<%= educator.email %>"
-        required
-      />
+        <div class="mb-4">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value="<%= educator.email %>"
+            required
+          />
+        </div>
 
-      <label for="phoneNo">Phone:</label>
-      <input
-        type="text"
-        id="phoneNo"
-        name="phoneNo"
-        value="<%= educator.phoneNo %>"
-        required
-      />
+        <div class="mb-4">
+          <label for="phoneNo">Phone:</label>
+          <input
+            type="text"
+            id="phoneNo"
+            name="phoneNo"
+            value="<%= educator.phoneNo %>"
+            required
+          />
+        </div>
 
-      <label for="experienceYears">Experience (Years):</label>
-      <input
-        type="number"
-        id="experienceYears"
-        name="experienceYears"
-        value="<%= educator.experienceYears %>"
-        required
-      />
+        <div class="mb-4">
+          <label for="experienceYears">Experience (Years):</label>
+          <input
+            type="number"
+            id="experienceYears"
+            name="experienceYears"
+            value="<%= educator.experienceYears %>"
+            required
+          />
+        </div>
 
-      <label for="bio">Bio:</label>
-      <textarea id="bio" name="bio"><%= educator.bio %></textarea>
+        <div class="mb-4">
+          <label for="bio">Bio:</label>
+          <textarea id="bio" name="bio" rows="4" required>
+<%= educator.bio %></textarea>
+        </div>
 
-      <label for="qualifications">Qualifications:</label>
-      <textarea id="qualifications" name="qualifications">
-<%= educator.qualifications %></textarea
-      >
+        <div class="mb-4">
+          <label for="qualifications">Qualifications:</label>
+          <textarea id="qualifications" name="qualifications" rows="4">
+<%= educator.qualifications %></textarea>
+        </div>
 
-      <label for="profileImage">Profile Image URL:</label>
-      <input
-        type="text"
-        id="profileImage"
-        name="profileImage"
-        value="<%= educator.profileImage %>"
-      />
+        <div class="mb-4">
+          <label for="profileImage">Profile Image URL:</label>
+          <input
+            type="text"
+            id="profileImage"
+            name="profileImage"
+            value="<%= educator.profileImage %>"
+          />
+          <% if (educator.profileImage) { %>
+          <div class="mt-2">
+            <img
+              src="<%= educator.profileImage %>"
+              alt="Educator Image"
+              class="rounded-full border w-32 h-32"
+            />
+          </div>
+          <% } %>
+        </div>
 
-      <% if (educator.profileImage) { %>
-      <img
-        src="<%= educator.profileImage %>"
-        alt="Educator Image"
-        width="150px"
-      />
-      <% } %>
+        <div class="mb-4">
+          <h3 class="text-lg font-bold text-gray-700 mb-2">Programs</h3>
+          <% programs.forEach(program => { %>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              name="programs"
+              value="<%= program._id %>"
+              <%= educator.programs.some(p => p._id.toString() === program._id.toString())
+              ? 'checked' : '' %>
+            />
+            <%= program.programName %>
+          </label>
+          <% }) %>
+        </div>
 
-      <h3>Programs</h3>
-      <% programs.forEach(program => { %>
-      <label>
-        <input type="checkbox" name="programs" value="<%= program._id %>" <%=
-        educator.programs.some(p => p._id.toString() === program._id.toString())
-        ? 'checked' : '' %> /> <%= program.programName %>
-      </label>
-      <% }) %>
+        <button type="submit">Update Educator</button>
+      </form>
 
-      <button type="submit">Update Educator</button>
-    </form>
-
-    <a href="/admin/educators">Back to Educators</a>
+      <a href="/admin/educators" class="back-link">Back to Educators</a>
+    </div>
   </body>
 </html>

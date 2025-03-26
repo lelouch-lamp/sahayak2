@@ -4,39 +4,83 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Educator Details</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f9fafb;
+        font-family: 'Inter', sans-serif;
+      }
+      .container {
+        max-width: 600px;
+        margin: 3rem auto;
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .heading {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1e40af;
+        margin-bottom: 2rem;
+      }
+      .info-label {
+        font-weight: bold;
+        color: #374151;
+      }
+      .info-value {
+        margin-bottom: 1rem;
+        color: #4b5563;
+      }
+      .profile-image {
+        margin: 1rem 0;
+        border-radius: 50%;
+      }
+    </style>
   </head>
   <body>
-    <h1>Educator Details</h1>
-    <p><strong>Name:</strong> <%= educator.name %></p>
-    <p><strong>Email:</strong> <%= educator.email %></p>
-    <p><strong>Phone:</strong> <%= educator.phoneNo %></p>
-    <p><strong>Experience:</strong> <%= educator.experienceYears %> years</p>
-    <p><strong>Bio:</strong> <%= educator.bio %></p>
-    <p><strong>Qualifications:</strong> <%= educator.qualifications %></p>
+    <div class="container">
+      <h1 class="heading">Educator Details</h1>
 
-    <% if (educator.profileImage) { %>
-    <p><strong>Profile Image:</strong></p>
-    <img
-      src="<%= educator.profileImage %>"
-      alt="Educator Image"
-      width="150px"
-    />
-    <% } %>
+      <div>
+        <p class="info-label">Name:</p>
+        <p class="info-value"><%= educator.name %></p>
 
-    <h3>Programs:</h3>
-    <ul>
-      <% educator.programs.forEach(program => { %>
-      <li><%= program.programName %></li>
-      <% }) %>
-    </ul>
+        <p class="info-label">Email:</p>
+        <p class="info-value"><%= educator.email %></p>
 
-    <a href="/admin/educators/edit/<%= educator._id %>">Edit</a>
-    <form
-      action="/admin/educators/delete/<%= educator._id %>"
-      method="POST"
-      onsubmit="return confirm('Are you sure you want to delete this educator?');"
-    >
-      <button type="submit">Delete</button>
-    </form>
+        <p class="info-label">Phone:</p>
+        <p class="info-value"><%= educator.phoneNo %></p>
+
+        <p class="info-label">Experience:</p>
+        <p class="info-value"><%= educator.experienceYears %> years</p>
+
+        <p class="info-label">Bio:</p>
+        <p class="info-value"><%= educator.bio %></p>
+
+        <p class="info-label">Qualifications:</p>
+        <p class="info-value"><%= educator.qualifications %></p>
+
+        <% if (educator.profileImage) { %>
+        <p class="info-label">Profile Image:</p>
+        <img
+          src="<%= educator.profileImage %>"
+          alt="Educator Image"
+          class="profile-image w-32 h-32 border"
+        />
+        <% } %>
+
+        <h3 class="info-label">Programs:</h3>
+        <ul class="list-disc list-inside text-gray-600 mb-4">
+          <% educator.programs.forEach(program => { %>
+          <li><%= program.programName %></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
   </body>
 </html>
