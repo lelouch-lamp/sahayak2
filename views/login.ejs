@@ -1,143 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Student Management System</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #fff;
-            font-family: Arial, sans-serif;
-        }
-        
-        /* SPLASH SCREEN */
-        .splash-screen {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease-in-out;
-        }
-        .splash-screen img {
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-        }
-        
-        /* LOGIN PAGE */
-        .login-wrapper {
-            display: none; /* Initially hidden */
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f4f4f4;
-        }
-        .login-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-        }
-        .login-logo img {
-            width: 100px;
-            margin-bottom: 10px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .login-button {
-            width: 100%;
-            padding: 10px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .login-button:hover {
-            background: #0056b3;
-        }
-        .fade-in {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-        }
-    </style>
-</head>
-<body>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #fff;
+        font-family: Arial, sans-serif;
+      }
 
-    <!-- SPLASH SCREEN -->
+      .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #f4f4f4;
+      }
+      .login-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+      }
+      .login-logo img {
+        width: 100px;
+        margin-bottom: 10px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .login-button {
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .login-button:hover {
+        background: #0056b3;
+      }
+      .error {
+        color: red;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <div class="login-container">
+        <h1>Login</h1>
+        <% if (locals.error) { %>
+        <div class="error"><%= error %></div>
+        <% } %>
+        <form action="/login" method="POST">
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <button type="submit" class="login-button">Login</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Student Management System</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #fff;
+        font-family: Arial, sans-serif;
+      }
+
+      /* SPLASH SCREEN */
+      .splash-screen {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 1s ease-in-out;
+      }
+      .splash-screen img {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+      }
+
+      /* LOGIN PAGE */
+      .login-wrapper {
+        display: none; /* Initially hidden */
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #f4f4f4;
+      }
+      .login-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+      }
+      .login-logo img {
+        width: 100px;
+        margin-bottom: 10px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .login-button {
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .login-button:hover {
+        background: #0056b3;
+      }
+      .fade-in {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+    </style>
+  </head>
+  <body>
+
     <div class="splash-screen">
-        <img src="/splash-image.jpg" alt="Splash Screen">
+      <img src="/splash-image.jpg" alt="Splash Screen" />
     </div>
 
-    <!-- LOGIN FORM -->
+
     <div class="login-wrapper">
-        <div class="login-container">
-            <h1>Login</h1>
-            <% if (locals.error) { %>
-                <div class="error"><%= error %></div>
-            <% } %>
-            <form action="/login" method="POST">
-                <div class="form-group">
-                    <label for="role">Role:</label>
-                    <select name="role" id="role" required>
+      <div class="login-container">
+        <h1>Login</h1>
+        <% if (locals.error) { %>
+        <div class="error"><%= error %></div>
+        <% } %>
+        <form action="/login" method="POST">
+          <div class="form-group">
+            <label for="role">Role:</label>
+            <select name="role" id="role" required>
                         <option value="admin">Admin</option>
                         <option value="educator">Educator</option>
                         <option value="student">Student</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit">Login</button>
-            </form>
-        </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const splashScreen = document.querySelector('.splash-screen');
-            const loginWrapper = document.querySelector('.login-wrapper');
-            const loginContainer = document.querySelector('.login-container');
+      document.addEventListener("DOMContentLoaded", () => {
+        const splashScreen = document.querySelector(".splash-screen");
+        const loginWrapper = document.querySelector(".login-wrapper");
+        const loginContainer = document.querySelector(".login-container");
 
+        setTimeout(() => {
+          splashScreen.style.opacity = "0";
+          setTimeout(() => {
+            splashScreen.style.display = "none";
+            loginWrapper.style.display = "flex";
             setTimeout(() => {
+<<<<<<< HEAD
                 splashScreen.style.opacity = "0";
                 setTimeout(() => {
                     splashScreen.style.display = "none";
@@ -147,25 +253,30 @@
                     }, 100);
                 }, 1000);
             }, 1000); // 3 seconds
+=======
+              loginContainer.classList.add("fade-in");
+            }, 100);
+          }, 1000);
+        }, 2000); // 3 seconds
+>>>>>>> 2d45bb949b3ae1ba2540ed7e77235590ffd2667a
 
-            // Form field animations
-            const form = document.querySelector('.login-form');
-            const inputs = form.querySelectorAll('input, select');
-            inputs.forEach(input => {
-                input.addEventListener('focus', () => {
-                    input.classList.add('input-focused');
-                });
-                input.addEventListener('blur', () => {
-                    input.classList.remove('input-focused');
-                });
-            });
-
-            // Form submission animation
-            form.addEventListener('submit', () => {
-                form.classList.add('form-submitted');
-            });
+        // Form field animations
+        const form = document.querySelector(".login-form");
+        const inputs = form.querySelectorAll("input, select");
+        inputs.forEach((input) => {
+          input.addEventListener("focus", () => {
+            input.classList.add("input-focused");
+          });
+          input.addEventListener("blur", () => {
+            input.classList.remove("input-focused");
+          });
         });
-    </script>
 
-</body>
-</html>
+        // Form submission animation
+        form.addEventListener("submit", () => {
+          form.classList.add("form-submitted");
+        });
+      });
+    </script>
+  </body>
+</html> -->
