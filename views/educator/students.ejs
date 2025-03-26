@@ -1,298 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Educator Panel - Student Assessments</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
     <style>
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 50;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .students-container {
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-        }
-        .sidebar {
-            background-color: #2c5e4f;
-        }
-        .sidebar a:hover {
-            background-color: #39a951;
-        }
-        .btn-primary {
-            background-color: #58f57a;
-        }
-        .btn-primary:hover {
-            background-color: #58f57a;
-        }
-        /* Back Button */
-        .back-btn {
-            position: absolute;
-            bottom: 3px;
-            left: 700px;
-            background-color:  #2c5e4f;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-            transition: all 0.3s ease-in-out;
-        }
+      .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 50;
+        transition: opacity 0.3s ease-in-out;
+      }
+      .students-container {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+      }
+      .sidebar {
+        background-color: #2c5e4f;
+      }
+      .sidebar a:hover {
+        background-color: #39a951;
+      }
+      .btn-primary {
+        background-color: #58f57a;
+      }
+      .btn-primary:hover {
+        background-color: #58f57a;
+      }
+      /* Back Button */
+      .back-btn {
+        position: absolute;
+        bottom: 3px;
+        left: 700px;
+        background-color: #2c5e4f;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        transition: all 0.3s ease-in-out;
+      }
 
-        .back-btn:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
+      .back-btn:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+      }
 
-        .back-btn:active {
-            transform: scale(0.98);
-        }
-
+      .back-btn:active {
+        transform: scale(0.98);
+      }
     </style>
-</head>
-<body class="bg-gray-100">
+  </head>
+  <body class="bg-gray-100">
     <a href="javascript:history.back()" class="back-btn">← Back</a>
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <nav class="w-64 sidebar text-white p-6">
-            <div class="text-2xl font-bold mb-10">Educator Panel</div>
-            <ul class="space-y-4">
-                <li><a href="/educator/dashboard" class="hover:bg-green-700 px-4 py-2 rounded block">Programs</a></li>
-                <li><a href="/logout" class="hover:bg-green-700 px-4 py-2 rounded block">Logout</a></li>
-            </ul>
-        </nav>
+      <!-- Sidebar -->
+      <nav class="w-64 sidebar text-white p-6">
+        <div class="text-2xl font-bold mb-10">Educator Panel</div>
+        <ul class="space-y-4">
+          <li>
+            <a
+              href="/educator/dashboard"
+              class="hover:bg-green-700 px-4 py-2 rounded block"
+              >Programs</a
+            >
+          </li>
+          <li>
+            <a href="/logout" class="hover:bg-green-700 px-4 py-2 rounded block"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </nav>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-10">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">Students</h1>
-                
-                <!-- Search Bar -->
-                <div class="relative w-1/3">
-                    <input 
-                        type="text" 
-                        id="studentSearch" 
-                        placeholder="Search students by name or ID" 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute right-3 top-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+      <!-- Main Content -->
+      <main class="flex-1 p-10">
+        <div class="flex justify-between items-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-800">Students</h1>
+
+          <!-- Search Bar -->
+          <div class="relative w-1/3">
+            <input
+              type="text"
+              id="studentSearch"
+              placeholder="Search students by name or ID"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 absolute right-3 top-3 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast hidden">
+          <div
+            class="bg-green-500 text-white px-6 py-4 border-0 rounded relative mb-4 shadow-lg"
+          >
+            <span class="text-xl inline-block mr-5 align-middle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </span>
+            <span
+              id="toastMessage"
+              class="inline-block align-middle mr-8"
+            ></span>
+          </div>
+        </div>
+
+        <!-- Students Container with Scrollbar -->
+        <div class="students-container">
+          <div id="studentsList" class="students-list space-y-6">
+            <% students.forEach(student => { %>
+            <div
+              class="student-card bg-white shadow-md rounded-lg p-6"
+              data-name="<%= student.name.toLowerCase() %>"
+              data-student-id="<%= student.studentId %>"
+            >
+              <div class="flex justify-between items-center mb-4">
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800">
+                    <%= student.name %>
+                  </h3>
+                  <p class="text-gray-500">
+                    Student ID: <%= student.studentId %>
+                  </p>
                 </div>
+                <button
+                  onclick="toggleForm('<%= student._id %>')"
+                  class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300"
+                >
+                  Add Assessment
+                </button>
+              </div>
+
+              <div
+                id="form-<%= student._id %>"
+                class="assessment-form hidden mt-4 bg-gray-50 p-6 rounded-lg"
+              >
+                <!-- Assessment form remains the same as in the original code -->
+                <form
+                  onsubmit="return submitAssessment(event, '<%= student._id %>')"
+                >
+                  <!-- Form content from the original code -->
+                  <input
+                    type="hidden"
+                    name="studentId"
+                    value="<%= student._id %>"
+                  />
+
+                  <div class="grid grid-cols-1 gap-4">
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Assessment Type</label
+                      >
+                      <select
+                        name="type"
+                        class="type-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      >
+                        <option value="">Select Assessment Type</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Program</label
+                      >
+                      <select
+                        name="programId"
+                        class="program-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled
+                        required
+                      >
+                        <option value="">Select Assessment Type First</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Assessment Name</label
+                      >
+                      <select
+                        name="assessmentName"
+                        class="assessment-name-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled
+                        required
+                      >
+                        <option value="">Select Program First</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Score (0-5)</label
+                      >
+                      <input
+                        type="number"
+                        name="score"
+                        min="0"
+                        max="5"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Comments</label
+                      >
+                      <textarea
+                        name="comments"
+                        rows="3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      ></textarea>
+                    </div>
+
+                    <div>
+                      <button
+                        type="submit"
+                        class="w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300"
+                      >
+                        Submit Assessment
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
-            
-            <!-- Toast Notification -->
-            <div id="toast" class="toast hidden">
-                <div class="bg-green-500 text-white px-6 py-4 border-0 rounded relative mb-4 shadow-lg">
-                    <span class="text-xl inline-block mr-5 align-middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </span>
-                    <span id="toastMessage" class="inline-block align-middle mr-8"></span>
-                </div>
-            </div>
-
-            <!-- Students Container with Scrollbar -->
-            <div class="students-container">
-                <div id="studentsList" class="students-list space-y-6">
-                    <% students.forEach(student => { %>
-                        <div class="student-card bg-white shadow-md rounded-lg p-6" data-name="<%= student.name.toLowerCase() %>" data-student-id="<%= student.studentId %>">
-                            <div class="flex justify-between items-center mb-4">
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-800"><%= student.name %></h3>
-                                    <p class="text-gray-500">Student ID: <%= student.studentId %></p>
-                                </div>
-                                <button onclick="toggleForm('<%= student._id %>')" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300">
-                                    Add Assessment
-                                </button>
-                            </div>
-
-                            <div id="form-<%= student._id %>" class="assessment-form hidden mt-4 bg-gray-50 p-6 rounded-lg">
-                                <!-- Assessment form remains the same as in the original code -->
-                                <form onsubmit="return submitAssessment(event, '<%= student._id %>')">
-                                    <!-- Form content from the original code -->
-                                    <input type="hidden" name="studentId" value="<%= student._id %>">
-                                    
-                                    <div class="grid grid-cols-1 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Assessment Type</label>
-                                            <select name="type" class="type-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                                                <option value="">Select Assessment Type</option>
-                                                <option value="weekly">Weekly</option>
-                                                <option value="monthly">Monthly</option>
-                                                <option value="quarterly">Quarterly</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Program</label>
-                                            <select name="programId" class="program-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" disabled required>
-                                                <option value="">Select Assessment Type First</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Assessment Name</label>
-                                            <select name="assessmentName" class="assessment-name-select w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" disabled required>
-                                                <option value="">Select Program First</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Score (0-5)</label>
-                                            <input type="number" name="score" min="0" max="5" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                                        </div>
-
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Comments</label>
-                                            <textarea name="comments" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                                        </div>
-
-                                        <div>
-                                            <button type="submit" class="w-full px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300">
-                                                Submit Assessment
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    <% }) %>
-                </div>
-            </div>
-        </main>
+            <% }) %>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script>
-        const programs = <%- JSON.stringify(programs) %>;
+      const programs = <%- JSON.stringify(programs) %>;
 
-        // Existing functions from the previous script (toggleForm, showToast, submitAssessment)
-        function toggleForm(studentId) {
-            const form = document.getElementById(`form-${studentId}`);
-            form.classList.toggle('hidden');
-        }
+      // Existing functions from the previous script (toggleForm, showToast, submitAssessment)
+      function toggleForm(studentId) {
+          const form = document.getElementById(`form-${studentId}`);
+          form.classList.toggle('hidden');
+      }
 
-        function showToast(message, isSuccess = true) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toastMessage.textContent = message;
-            toast.classList.remove('hidden');
-            
-            if (isSuccess) {
-                toast.querySelector('div').className = 'bg-green-500 text-white px-6 py-4 border-0 rounded relative mb-4 shadow-lg';
-            } else {
-                toast.querySelector('div').className = 'bg-red-500 text-white px-6 py-4 border-0 rounded relative mb-4 shadow-lg';
-            }
+      function showToast(message, isSuccess = true) {
+          const toast = document.getElementById('toast');
+          const toastMessage = document.getElementById('toastMessage');
 
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
+          toastMessage.textContent = message;
+          toast.classList.remove('hidden');
 
-        function submitAssessment(event, studentId) {
-            event.preventDefault();
-            const form = event.target;
-            
-            // Simulate form submission (replace with actual AJAX/fetch call)
-            try {
-                // Validation and processing would happen here
-                showToast(`Assessment added successfully for Student ${studentId}`);
-                form.reset();
-                toggleForm(studentId);
-            } catch (error) {
-                showToast('Failed to add assessment', false);
-            }
-        }
+          if (isSuccess) {
+              toast.querySelector('div').className = 'bg-green-500 text-white px-6 py-4 border-0 rounded relative mb-4 shadow-lg';
+          } else {
+              toast.querySelector('div').className = 'bg-red-500 text-white px-6 py-4 border-0 rounded relative mb-4 shadow-lg';
+          }
 
-        // Search functionality
-        document.addEventListener("DOMContentLoaded", function () {
-            const searchInput = document.getElementById('studentSearch');
-            const studentCards = document.querySelectorAll('.student-card');
+          setTimeout(() => {
+              toast.classList.add('hidden');
+          }, 3000);
+      }
 
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
+      function submitAssessment(event, studentId) {
+          event.preventDefault();
+          const form = event.target;
 
-                studentCards.forEach(card => {
-                    const name = card.dataset.name;
-                    const studentId = card.dataset.studentId;
+          // Simulate form submission (replace with actual AJAX/fetch call)
+          try {
+              // Validation and processing would happen here
+              showToast(`Assessment added successfully for Student ${studentId}`);
+              form.reset();
+              toggleForm(studentId);
+          } catch (error) {
+              showToast('Failed to add assessment', false);
+          }
+      }
 
-                    if (name.includes(searchTerm) || studentId.includes(searchTerm)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
+      // Search functionality
+      document.addEventListener("DOMContentLoaded", function () {
+          const searchInput = document.getElementById('studentSearch');
+          const studentCards = document.querySelectorAll('.student-card');
 
-            // Rest of the existing initialization code for programs and selects
-            const typeSelects = document.querySelectorAll(".type-select");
-            const programSelects = document.querySelectorAll(".program-select");
-            const assessmentNameSelects = document.querySelectorAll(".assessment-name-select");
+          searchInput.addEventListener('input', function() {
+              const searchTerm = this.value.toLowerCase().trim();
 
-            typeSelects.forEach((typeSelect, index) => {
-                typeSelect.addEventListener("change", function () {
-                    const selectedType = this.value;
-                    const programSelect = programSelects[index];
-                    const assessmentNameSelect = assessmentNameSelects[index];
+              studentCards.forEach(card => {
+                  const name = card.dataset.name;
+                  const studentId = card.dataset.studentId;
 
-                    programSelect.innerHTML = "<option value=''>Select a Program</option>";
-                    programSelect.disabled = false;
-                    assessmentNameSelect.innerHTML = "<option value=''>Select Program First</option>";
-                    assessmentNameSelect.disabled = true;
+                  if (name.includes(searchTerm) || studentId.includes(searchTerm)) {
+                      card.style.display = 'block';
+                  } else {
+                      card.style.display = 'none';
+                  }
+              });
+          });
 
-                    programs.forEach(program => {
-                        let assessmentsToShow = [];
-                        switch(selectedType) {
-                            case 'weekly': assessmentsToShow = program.weekly || []; break;
-                            case 'monthly': assessmentsToShow = program.monthly || []; break;
-                            case 'quarterly': assessmentsToShow = program.quarterly || []; break;
-                        }
+          // Rest of the existing initialization code for programs and selects
+          const typeSelects = document.querySelectorAll(".type-select");
+          const programSelects = document.querySelectorAll(".program-select");
+          const assessmentNameSelects = document.querySelectorAll(".assessment-name-select");
 
-                        if (assessmentsToShow.length > 0) {
-                            const option = document.createElement("option");
-                            option.value = program._id;
-                            option.textContent = program.programName;
-                            programSelect.appendChild(option);
-                        }
-                    });
-                });
+          typeSelects.forEach((typeSelect, index) => {
+              typeSelect.addEventListener("change", function () {
+                  const selectedType = this.value;
+                  const programSelect = programSelects[index];
+                  const assessmentNameSelect = assessmentNameSelects[index];
 
-                const programSelect = programSelects[index];
-                const assessmentNameSelect = assessmentNameSelects[index];
+                  programSelect.innerHTML = "<option value=''>Select a Program</option>";
+                  programSelect.disabled = false;
+                  assessmentNameSelect.innerHTML = "<option value=''>Select Program First</option>";
+                  assessmentNameSelect.disabled = true;
 
-                programSelect.addEventListener("change", function () {
-                    const selectedProgramId = this.value;
-                    const selectedType = typeSelects[index].value;
+                  programs.forEach(program => {
+                      let assessmentsToShow = [];
+                      switch(selectedType) {
+                          case 'weekly': assessmentsToShow = program.weekly || []; break;
+                          case 'monthly': assessmentsToShow = program.monthly || []; break;
+                          case 'quarterly': assessmentsToShow = program.quarterly || []; break;
+                      }
 
-                    assessmentNameSelect.innerHTML = "<option value=''>Select Assessment</option>";
-                    assessmentNameSelect.disabled = false;
+                      if (assessmentsToShow.length > 0) {
+                          const option = document.createElement("option");
+                          option.value = program._id;
+                          option.textContent = program.programName;
+                          programSelect.appendChild(option);
+                      }
+                  });
+              });
 
-                    const selectedProgram = programs.find(p => p._id === selectedProgramId);
-                    if (selectedProgram) {
-                        let assessmentsToShow = [];
-                        switch(selectedType) {
-                            case 'weekly': assessmentsToShow = selectedProgram.weekly || []; break;
-                            case 'monthly': assessmentsToShow = selectedProgram.monthly || []; break;
-                            case 'quarterly': assessmentsToShow = selectedProgram.quarterly || []; break;
-                        }
+              const programSelect = programSelects[index];
+              const assessmentNameSelect = assessmentNameSelects[index];
 
-                        assessmentsToShow.forEach(assessment => {
-                            const option = document.createElement("option");
-                            option.value = assessment.name;
-                            option.textContent = assessment.name;
-                            assessmentNameSelect.appendChild(option);
-                        });
-                    }
-                });
-            });
-        });
+              programSelect.addEventListener("change", function () {
+                  const selectedProgramId = this.value;
+                  const selectedType = typeSelects[index].value;
+
+                  assessmentNameSelect.innerHTML = "<option value=''>Select Assessment</option>";
+                  assessmentNameSelect.disabled = false;
+
+                  const selectedProgram = programs.find(p => p._id === selectedProgramId);
+                  if (selectedProgram) {
+                      let assessmentsToShow = [];
+                      switch(selectedType) {
+                          case 'weekly': assessmentsToShow = selectedProgram.weekly || []; break;
+                          case 'monthly': assessmentsToShow = selectedProgram.monthly || []; break;
+                          case 'quarterly': assessmentsToShow = selectedProgram.quarterly || []; break;
+                      }
+
+                      assessmentsToShow.forEach(assessment => {
+                          const option = document.createElement("option");
+                          option.value = assessment.name;
+                          option.textContent = assessment.name;
+                          assessmentNameSelect.appendChild(option);
+                      });
+                  }
+              });
+          });
+      });
     </script>
-</body>
+  </body>
 </html>

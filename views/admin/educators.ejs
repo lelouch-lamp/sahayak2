@@ -58,7 +58,7 @@
         font-size: 1.5rem;
         font-weight: bold;
         margin-bottom: 1rem;
-        color:#2c5e4f;
+        color: #2c5e4f;
       }
       .form-group {
         margin-bottom: 1rem;
@@ -136,7 +136,10 @@
         </button>
 
         <!-- Add Educator Form -->
-        <div id="formContainer" class="form-container hidden max-h-96 overflow-y-auto">
+        <div
+          id="formContainer"
+          class="form-container hidden max-h-96 overflow-y-auto"
+        >
           <h2>Add New Educator</h2>
           <form action="/admin/educators/add" method="POST" id="educatorForm">
             <div class="form-group">
@@ -151,7 +154,13 @@
 
             <div class="form-group">
               <label for="experienceYears">Years of Experience:</label>
-              <input type="number" id="experienceYears" name="experienceYears" min="0" required />
+              <input
+                type="number"
+                id="experienceYears"
+                name="experienceYears"
+                min="0"
+                required
+              />
             </div>
 
             <div class="form-group">
@@ -168,15 +177,15 @@
               <label>Programs:</label>
               <div class="checkbox-group">
                 <% programs.forEach(program => { %>
-                  <label class="inline-flex items-center mr-4 mb-2">
-                    <input 
-                      type="checkbox" 
-                      name="programs" 
-                      value="<%= program._id %>" 
-                      class="form-checkbox"
-                    />
-                    <span class="ml-2"><%= program.programName %></span>
-                  </label>
+                <label class="inline-flex items-center mr-4 mb-2">
+                  <input
+                    type="checkbox"
+                    name="programs"
+                    value="<%= program._id %>"
+                    class="form-checkbox"
+                  />
+                  <span class="ml-2"><%= program.programName %></span>
+                </label>
                 <% }) %>
               </div>
             </div>
@@ -184,7 +193,6 @@
             <button type="submit">Add Educator</button>
           </form>
         </div>
-
         <!-- Educator List with Search and Filter -->
         <div class="educators-table">
           <div class="flex mb-4">
@@ -194,13 +202,15 @@
               placeholder="Search educators by name or ID"
               class="w-full p-2 border border-gray-300 rounded mr-2"
             />
-            <select 
-              id="filterProgram" 
+            <select
+              id="filterProgram"
               class="w-1/3 p-2 border border-gray-300 rounded"
             >
               <option value="">All Programs</option>
               <% programs.forEach(program => { %>
-                <option value="<%= program._id %>"><%= program.programName %></option>
+              <option value="<%= program._id %>">
+                <%= program.programName %>
+              </option>
               <% }) %>
             </select>
           </div>
@@ -221,25 +231,36 @@
                 <td><%= educator.educatorId %></td>
                 <td><%= educator.name %></td>
                 <td><%= educator.experienceYears %> years</td>
-                <td><%= educator.programs.map(p => p.programName).join(', ') %></td>
                 <td>
-                  <a href="/admin/educators/<%= educator._id %>">
-                    <button class="bg-green-600 text-white px-4 py-2 rounded">
-                      View
-                    </button>
-                  </a>
-                  <a href="/admin/educators/editEducator/<%= educator._id %>">
-                    <button class="bg-yellow-500 text-white px-4 py-2 rounded">
-                      Edit
-                    </button>
-                  </a>
-                  <form
-                    action="/admin/educators/delete/<%= educator._id %>"
-                    method="POST"
-                    style="display: inline;"
-                  >
-                    <button type="submit" class="delete-btn">Delete</button>
-                  </form>
+                  <%= educator.programs.map(p => p.programName).join(', ') %>
+                </td>
+                <td>
+                  <div class="flex space-x-2">
+                    <a href="/admin/educators/<%= educator._id %>">
+                      <button class="bg-green-600 text-white px-4 py-2 rounded">
+                        View
+                      </button>
+                    </a>
+
+                    <a href="/admin/educators/edit/<%= educator._id %>">
+                      <button
+                        class="bg-yellow-500 text-white px-4 py-2 rounded"
+                      >
+                        Edit
+                      </button>
+                    </a>
+
+                    <form
+                      onsubmit="deleteEducator(event, '<%= educator._id %>')"
+                    >
+                      <button
+                        type="submit"
+                        class="bg-red-500 text-white px-4 py-2 rounded"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
               <% }) %>
@@ -250,30 +271,88 @@
     </div>
 
     <script>
-      document.getElementById("toggleFormBtn").addEventListener("click", function () {
-        document.getElementById("formContainer").classList.toggle("hidden");
-      });
+      document.addEventListener("DOMContentLoaded", () => {
+        async function deleteEducator(event, educatorId) {
+          event.preventDefault(); // Prevent default form submission
 
-      document.getElementById("searchInput").addEventListener("input", function () {
-        const filter = this.value.toLowerCase();
-        document.querySelectorAll("#educatorsTableBody tr").forEach((row) => {
-          const educatorId = row.querySelector("td:nth-child(1)").textContent.toLowerCase();
-          const educatorName = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
-          row.style.display =
-            educatorId.includes(filter) || educatorName.includes(filter) ? "" : "none";
-        });
-      });
+          const confirmDelete = confirm(
+            "Are you sure you want to delete this educator?"
+          );
+          if (!confirmDelete) return;
 
-      document.getElementById("filterProgram").addEventListener("change", function () {
-        const selectedProgram = this.value;
-        document.querySelectorAll("#educatorsTableBody tr").forEach((row) => {
-          const programsCell = row.querySelector("td:nth-child(4)");
-          row.style.display = 
-            selectedProgram === "" || 
-            programsCell.textContent.includes(
-              document.querySelector(`#filterProgram option[value="${selectedProgram}"]`).textContent)
-            ? "" : "none";
+          const response = await fetch(
+            `/admin/educators/delete/${educatorId}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          if (response.ok) {
+            alert("Educator deleted successfully!");
+            location.reload(); // Refresh the page
+          } else {
+            alert("Error deleting educator.");
+          }
+        }
+
+        // Add event listeners
+        const deleteButtons = document.querySelectorAll("form[onsubmit]");
+        deleteButtons.forEach((form) => {
+          form.addEventListener("submit", (event) => {
+            const educatorId = form
+              .querySelector('button[type="submit"]')
+              .closest("form")
+              .getAttribute("data-educator-id");
+            deleteEducator(event, educatorId);
+          });
         });
+
+        // Toggle form visibility
+        document
+          .getElementById("toggleFormBtn")
+          .addEventListener("click", function () {
+            document.getElementById("formContainer").classList.toggle("hidden");
+          });
+
+        // Search functionality
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", function () {
+            const filter = this.value.toLowerCase();
+            document
+              .querySelectorAll("#educatorsTableBody tr")
+              .forEach((row) => {
+                const educatorId = row
+                  .querySelector("td:nth-child(1)")
+                  .textContent.toLowerCase();
+                const educatorName = row
+                  .querySelector("td:nth-child(2)")
+                  .textContent.toLowerCase();
+                row.style.display =
+                  educatorId.includes(filter) || educatorName.includes(filter)
+                    ? ""
+                    : "none";
+              });
+          });
+
+        // Program filter functionality
+        document
+          .getElementById("filterProgram")
+          .addEventListener("change", function () {
+            const selectedProgram = this.value;
+            const selectedProgramText = this.options[this.selectedIndex].text;
+
+            document
+              .querySelectorAll("#educatorsTableBody tr")
+              .forEach((row) => {
+                const programsCell = row.querySelector("td:nth-child(4)");
+                row.style.display =
+                  selectedProgram === "" ||
+                  programsCell.textContent.includes(selectedProgramText)
+                    ? ""
+                    : "none";
+              });
+          });
       });
     </script>
   </body>
