@@ -1,228 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .assessments-container {
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-        }
+      .assessments-container {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+      }
     </style>
-</head>
-<body class="bg-gray-100">
+  </head>
+  <body class="bg-gray-100">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <nav class="w-64 bg-blue-800 text-white p-6">
-            <div class="text-2xl font-bold mb-10">Student Portal</div>
-            <ul class="space-y-4">
-                <li>
-                    <a href="/student/dashboard" class="hover:bg-blue-700 px-4 py-2 rounded block">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-                        </svg>
-                        Dashboard
-                    </a>
-                </li>
-                <li>
-                    <a href="/student/assessments/weekly" class="hover:bg-blue-700 px-4 py-2 rounded block">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Weekly Assessments
-                    </a>
-                </li>
-                <li>
-                    <a href="/student/assessments/monthly" class="hover:bg-blue-700 px-4 py-2 rounded block">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12H4V4z" />
-                        </svg>
-                        Monthly Assessments
-                    </a>
-                </li>
-                <li>
-                    <a href="/student/assessments/quarterly" class="hover:bg-blue-700 px-4 py-2 rounded block">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 18h14V9H5v9a2 2 0 002 2z" />
-                        </svg>
-                        Quarterly Assessments
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout" class="hover:bg-blue-700 px-4 py-2 rounded block">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L14.586 11H7a1 1 0 110-2h7.586l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                        Logout
-                    </a>
-                </li>
-            </ul>
-        </nav>
+      <nav class="w-64 bg-blue-800 text-white p-6">
+        <div class="text-2xl font-bold mb-10">Student Portal</div>
+        <ul class="space-y-4">
+          <li>
+            <a
+              href="/student/dashboard"
+              class="hover:bg-blue-700 px-4 py-2 rounded block"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              href="/student/assessments/weekly"
+              class="hover:bg-blue-700 px-4 py-2 rounded block"
+              >Weekly Assessments</a
+            >
+          </li>
+          <li>
+            <a
+              href="/student/assessments/monthly"
+              class="hover:bg-blue-700 px-4 py-2 rounded block"
+              >Monthly Assessments</a
+            >
+          </li>
+          <li>
+            <a
+              href="/student/assessments/quarterly"
+              class="hover:bg-blue-700 px-4 py-2 rounded block"
+              >Quarterly Assessments</a
+            >
+          </li>
+          <li>
+            <a href="/logout" class="hover:bg-blue-700 px-4 py-2 rounded block"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </nav>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-10">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">My Assessments</h1>
-                
-                <!-- Search Bar -->
-                <div class="relative w-1/3">
-                    <input 
-                        type="text" 
-                        id="assessmentSearch" 
-                        placeholder="Search assessments" 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute right-3 top-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-            </div>
+      <main class="flex-1 p-10">
+        <div class="flex justify-between items-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-800">My Assessments</h1>
+        </div>
 
-            <!-- Assessments Container with Scrollbar -->
-            <div class="assessments-container">
-                <div id="assessmentsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% if (typeof assessments !== "undefined" && assessments.length > 0) { %>
-                        <% assessments.forEach(assessment => { %>
-                            <div class="assessment-card bg-white shadow-md rounded-lg p-6 transition-all duration-300 hover:shadow-lg" 
-                                 data-name="<%= assessment.assessmentName.toLowerCase() %>" 
-                                 data-type="<%= assessment.type.toLowerCase() %>">
-                                <div class="mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= assessment.assessmentName %></h3>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm text-gray-600 bg-blue-50 px-2 py-1 rounded">
-                                            <%= assessment.type.charAt(0).toUpperCase() + assessment.type.slice(1) %> Assessment
-                                        </span>
-                                        <span class="text-lg font-bold text-blue-600">
-                                            <%= assessment.score %>/5
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="border-t border-gray-200 pt-4">
-                                    <p class="text-sm text-gray-600">
-                                        <strong>Date:</strong> <%= new Date(assessment.date).toLocaleDateString() %>
-                                    </p>
-                                    <% if (assessment.comments) { %>
-                                        <p class="text-sm text-gray-500 mt-2 italic">
-                                            "<%= assessment.comments %>"
-                                        </p>
-                                    <% } %>
-                                </div>
-                            </div>
-                        <% }) %>
-                    <% } else { %>
-                        <div class="col-span-full text-center text-gray-500">
-                            <p>No assessments available.</p>
-                        </div>
-                    <% } %>
-                </div>
+        <div class="assessments-container">
+          <div
+            id="assessmentsList"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            <% if (typeof assessments !== "undefined" && assessments.length > 0)
+            { %> <% assessments.forEach(assessment => { %>
+            <div
+              class="assessment-card bg-white shadow-md rounded-lg p-6 transition-all duration-300 hover:shadow-lg"
+            >
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                <%= assessment.assessmentName %>
+              </h3>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600 bg-blue-50 px-2 py-1 rounded"
+                  ><%= assessment.type.charAt(0).toUpperCase() +
+                  assessment.type.slice(1) %> Assessment</span
+                >
+                <span class="text-lg font-bold text-blue-600"
+                  ><%= assessment.score %>/5</span
+                >
+              </div>
+              <div class="border-t border-gray-200 pt-4">
+                <p class="text-sm text-gray-600">
+                  <strong>Date:</strong> <%= new
+                  Date(assessment.date).toLocaleDateString() %>
+                </p>
+                <% if (assessment.comments) { %>
+                <p class="text-sm text-gray-500 mt-2 italic">
+                  "<%= assessment.comments %>"
+                </p>
+                <% } %>
+              </div>
             </div>
-        </main>
+            <% }) %> <% } else { %>
+            <div class="col-span-full text-center text-gray-500">
+              <p>No assessments available.</p>
+            </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div
+          class="charts-container mt-10 grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          <div class="chart-card bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Weekly Progress</h3>
+            <canvas id="weeklyChart"></canvas>
+          </div>
+          <div class="chart-card bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Monthly Progress</h3>
+            <canvas id="monthlyChart"></canvas>
+          </div>
+          <div class="chart-card bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-4">Quarterly Progress</h3>
+            <canvas id="quarterlyChart"></canvas>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const searchInput = document.getElementById('assessmentSearch');
-            const assessmentCards = document.querySelectorAll('.assessment-card');
+      const assessments = <%- JSON.stringify(assessments) %>;
+      const weeklyAssessments = assessments.filter(a => a.type === 'weekly');
+      const monthlyAssessments = assessments.filter(a => a.type === 'monthly');
+      const quarterlyAssessments = assessments.filter(a => a.type === 'quarterly');
 
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-
-                assessmentCards.forEach(card => {
-                    const name = card.dataset.name;
-                    const type = card.dataset.type;
-
-                    if (name.includes(searchTerm) || type.includes(searchTerm)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
+      function createChart(elementId, data, label) {
+        const ctx = document.getElementById(elementId).getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: data.map(a => a.assessmentName),
+            datasets: [{
+              label: label,
+              data: data.map(a => a.score),
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 5
+              }
+            }
+          }
         });
+      }
+
+      createChart('weeklyChart', weeklyAssessments, 'Weekly Scores');
+      createChart('monthlyChart', monthlyAssessments, 'Monthly Scores');
+      createChart('quarterlyChart', quarterlyAssessments, 'Quarterly Scores');
     </script>
-</body>
+  </body>
 </html>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <div class="dashboard-container">
-        <nav class="sidebar">
-            <div class="logo">Student Portal</div>
-            <ul>
-                <li><a href="/student/assessments/weekly">Weekly Assessments</a></li>
-                <li><a href="/student/assessments/monthly">Monthly Assessments</a></li>
-                <li><a href="/student/assessments/quarterly">Quarterly Assessments</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
-        
-        <main class="main-content">
-            <h1>My Assessments</h1>
-            
-            <div class="charts-container">
-                <div class="chart-card">
-                    <h3>Weekly Progress</h3>
-                    <canvas id="weeklyChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h3>Monthly Progress</h3>
-                    <canvas id="monthlyChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h3>Quarterly Progress</h3>
-                    <canvas id="quarterlyChart"></canvas>
-                </div>
-            </div>
-
-            <script>
-                const assessments = <%- JSON.stringify(assessments) %>;
-                
-                // Filter assessments by type
-                const weeklyAssessments = assessments.filter(a => a.type === 'weekly');
-                const monthlyAssessments = assessments.filter(a => a.type === 'monthly');
-                const quarterlyAssessments = assessments.filter(a => a.type === 'quarterly');
-
-                // Create charts
-                function createChart(elementId, data, label) {
-                    const ctx = document.getElementById(elementId).getContext('2d');
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: data.map(a => a.assessmentName),
-                            datasets: [{
-                                label: label,
-                                data: data.map(a => a.score),
-                                borderColor: 'rgb(75, 192, 192)',
-                                tension: 0.1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    max: 5
-                                }
-                            }
-                        }
-                    });
-                }
-
-                createChart('weeklyChart', weeklyAssessments, 'Weekly Scores');
-                createChart('monthlyChart', monthlyAssessments, 'Monthly Scores');
-                createChart('quarterlyChart', quarterlyAssessments, 'Quarterly Scores');
-            </script>
-        </main>
-    </div>
-</body>
-</html> -->
